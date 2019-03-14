@@ -1,10 +1,13 @@
 package com.example.myfinal;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             //connecting to JSON
             JSONObject json = new JSONObject(sb.toString());
             JSONArray jarr = json.getJSONArray("exam");
-                for(int i =0; i < jarr.length(); i++){
+                for(int i =0; i <= 4; i++){
                     JSONObject obj = jarr.getJSONObject(i);
                     String id = obj.getString("id");
                     String question = obj.getString("question");
@@ -91,8 +94,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     QuestionItem item = new QuestionItem(id,question,opt1,opt2,opt3,opt4);
                     list.add(item);
                 }
-
-
 
 
         } catch (MalformedURLException e) {
@@ -131,5 +132,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             builder.setNeutralButton("okay",null);
             dialog = builder.create();
             dialog.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //inflate the menu
+        getMenuInflater().inflate(R.menu.menu,menu);
+
+        MenuItem item =  menu.findItem(R.id.prev);
+        item.setVisible(false);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.next){
+            Intent nextpage = new Intent(MainActivity.this,NextQuestion.class);
+            this.startActivityForResult(nextpage,1);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
